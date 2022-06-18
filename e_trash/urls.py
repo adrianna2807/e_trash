@@ -16,8 +16,11 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
+from e_trash.views import HomepageView
+
 urlpatterns = [
     path('admin/', admin.site.urls),
     #path('trash/', include('trash.urls')),
     path('base/', include('base.urls')),
+    path('homepage/', HomepageView.as_view(), name="homepage")
 ]
