@@ -6,4 +6,4 @@ class ClientCreateView(CreateView):
     model = Client
     template_name = 'form.html'
     fields = "__all__"
-    #success_url = reverse_lazy("polls:polls-list-view")
+    success_url = reverse_lazy("homepage")
