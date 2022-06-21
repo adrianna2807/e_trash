@@ -2,7 +2,7 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    {{ form }}
-    <input type="submit" value= "Submit"<button type="button" class="btn btn-success"></button>
+    {{ form.as_p }}
+    <input type="submit" value="Submit">
 </form>
 {% endblock %}

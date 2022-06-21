@@ -20,7 +20,7 @@ from e_trash.views import HomepageView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    #path('trash/', include('trash.urls')),
+    path('trash/', include('trash.urls')),
     path('base/', include('base.urls')),
     path('homepage/', HomepageView.as_view(), name='homepage')
 ]
