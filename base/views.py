@@ -1,4 +1,4 @@
-from django.urls import reverse_lazy
+from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from base.models import Client, Address
 
@@ -7,7 +7,7 @@ class ClientCreateView(CreateView):
     model = Client
     template_name = 'client_form.html'
     fields = "__all__"
-    success_url = reverse_lazy("homepage")
+    success_url = reverse_lazy("adresses-create-view")
 
 
 class ClientListView(ListView):
