@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <p>Do you really want to delete:</p>
+    <p>TRASH ID: {{ trash.id }}</p>
+    <p>TRASH: {{ trash.type }}</p>
+    <p><input type="submit" value="Delete"></p>
+</form>
+{% endblock %}
