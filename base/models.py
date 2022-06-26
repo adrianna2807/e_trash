@@ -13,12 +13,14 @@ class Zone(models.Model):
 class Client(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    address = models.CharField(max_length=128)
+    #address = models.ForeignKey(
+        #Address, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
+    #)
     email = models.CharField(max_length=128) #walidacja
     phone = models.IntegerField(max_length=9) #walidacja przedrostek
-    # zone = models.ForeignKey(
-    #     Zone, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
-    # )
+    zone = models.ForeignKey(
+       Zone, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
+     )
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
