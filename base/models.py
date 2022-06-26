@@ -10,12 +10,20 @@ class Zone(models.Model):
         return f"{self.name}"
 
 
+class Address(models.Model):
+    street = models.CharField(max_length=128)
+    city = models.CharField(max_length=128)
+    postal_code = models.PositiveSmallIntegerField(max_length=5)
+
+    def __str__(self):
+        return f"{self.street} {self.city} {self.postal_code}"
+
 class Client(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
-    #address = models.ForeignKey(
-        #Address, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
-    #)
+    address = models.ForeignKey(
+        Address, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
+    )
     email = models.CharField(max_length=128) #walidacja
     phone = models.IntegerField(max_length=9) #walidacja przedrostek
     zone = models.ForeignKey(
@@ -24,15 +32,6 @@ class Client(models.Model):
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
-
-
-class Address(models.Model):
-    street = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    postal_code = models.PositiveSmallIntegerField(max_length=5)
-
-    def __str__(self):
-        return f"{self.street} {self.city} {self.postal_code}"
 
 
 class Recycler(models.Model):
