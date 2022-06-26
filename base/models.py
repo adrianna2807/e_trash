@@ -15,6 +15,9 @@ class Address(models.Model):
     city = models.CharField(max_length=128)
     postal_code = models.PositiveSmallIntegerField(max_length=5)
 
+    class Meta:
+        verbose_name_plural = "Addresses"
+
     def __str__(self):
         return f"{self.street} {self.city} {self.postal_code}"
 
