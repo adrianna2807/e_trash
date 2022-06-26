@@ -21,6 +21,7 @@ class Address(models.Model):
     def __str__(self):
         return f"{self.street} {self.city} {self.postal_code}"
 
+
 class Client(models.Model):
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
@@ -33,13 +34,15 @@ class Client(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
-
+#django.integerchoices albo textchoices
 class Recycler(models.Model):
     name = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
     postal_code = models.PositiveSmallIntegerField(max_length=5)
     nip = models.IntegerField(max_length=10)
+    #dopisać na pewno capacity
+    #capacity =
     type = models.ForeignKey(
         Trash, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
     )
@@ -50,12 +53,15 @@ class Recycler(models.Model):
         return f"{self.name} "
 
 
-class Schedule(models.Model):
-    pass
-
-
 class Order(models.Model):
+    client = models.ForeignKey(
+        Client, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
+    )
+    recycler = models.ForeignKey(
+        Recycler, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
+    )
     order_number = models.CharField(max_length=128)  # jakas walidacja ze bedzie automatycznie nadawać?
+    #tutaj zrobić choice
     date = models.DateField()
     order_date = models.DateTimeField(auto_now_add=True)
     trash_type = models.ForeignKey(

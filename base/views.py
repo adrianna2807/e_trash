@@ -1,13 +1,13 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView
 from base.models import Client, Address
-
-
+#testy do forms, walidacji i FormView
+#zmienić na FormView i przypisać adres do klienta
 class ClientCreateView(CreateView):
     model = Client
     template_name = 'client_form.html'
     fields = "__all__"
-    success_url = reverse_lazy("adresses-create-view")
+    success_url = reverse_lazy("base:adresses-create-view")
 
 
 class ClientListView(ListView):
