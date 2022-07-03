@@ -34,15 +34,22 @@ class Client(models.Model):
     def __str__(self):
         return f"{self.first_name} {self.last_name}"
 
+
+class Availability(models.Model):
+    DAYS = [('PN', 'Poniedziałek'), ('WT', 'Wtorek'), ('ŚR', 'Środa'), ('CZ', 'Czwartek'), ('PT', 'Piątek'), ('SB', 'Sobota')]
+    day = models.CharField(choices=DAYS, max_length=15)
+
+
 #django.integerchoices albo textchoices
 class Recycler(models.Model):
+    CAPACITY_VALUES = [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')]
     name = models.CharField(max_length=128)
     street = models.CharField(max_length=128)
     city = models.CharField(max_length=128)
     postal_code = models.PositiveSmallIntegerField(max_length=5)
     nip = models.IntegerField(max_length=10)
-    #dopisać na pewno capacity
-    #capacity =
+    available_days = models.ManyToManyField(Availability)
+    capacity = models.SmallIntegerField(choices=CAPACITY_VALUES, max_length=1, default='1')
     type = models.ForeignKey(
         Trash, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
     )
@@ -53,6 +60,14 @@ class Recycler(models.Model):
         return f"{self.name} "
 
 
+TIME_INTERVALS = [('ZERO', 'Wybierz godzinę odbioru'),
+                  ('ONE', '8.00 - 10.00'),
+                  ('TWO', '10.00 - 12.00'),
+                  ('THREE', '12.00 - 14.00'),
+                  ('FOUR', '14.00 - 16.00'),
+                  ('FIVE', '16.00 - 18.00')
+                  ]
+
 class Order(models.Model):
     client = models.ForeignKey(
         Client, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
@@ -61,8 +76,10 @@ class Order(models.Model):
         Recycler, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
     order_number = models.CharField(max_length=128)  # jakas walidacja ze bedzie automatycznie nadawać?
-    #tutaj zrobić choice
-    date = models.DateField()
+    order_day = models.ForeignKey(
+        Availability, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
+    )
+    order_time = models.CharField(choices=TIME_INTERVALS, default='ZERO', max_length=128)
     order_date = models.DateTimeField(auto_now_add=True)
     trash_type = models.ForeignKey(
         Trash, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
