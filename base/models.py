@@ -51,7 +51,7 @@ class Recycler(models.Model):
     available_days = models.ManyToManyField(Availability, choices=Availability.DAYS)
     capacity = models.SmallIntegerField(choices=CAPACITY_VALUES, max_length=1, default='1')
     type = models.ForeignKey(
-        Trash, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
+        Trash, choices=Trash.TRASHES, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
     )
     zone = models.ForeignKey(
         Zone, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
