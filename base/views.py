@@ -3,8 +3,10 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 
-from base.forms import RecyclerModelForm, OrderModelForm, ClientForm, AddressForm
-from base.models import Client, Address
+from base.forms import  OrderModelForm, ClientForm, AddressForm, RecyclerForm
+from base.models import Client, Address, Recycler
+
+
 #testy do forms, walidacji i FormView
 #zmienić na FormView i przypisać adres do klienta
 
@@ -56,10 +58,37 @@ class ClientDeleteView(DeleteView):
 
 # WIDOKI RECYCLER
 
-class RecyclerModelFormView(FormView):
+class RecyclerFormView(FormView):
     template_name = "form.html"
-    form_class = RecyclerModelForm
+    form_class = RecyclerForm
     success_url = reverse_lazy("homepage")
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        name = form.cleaned_data["name"]
+        street = form.cleaned_data["street"]
+        city = form.cleaned_data["city"]
+        postal_code = form.cleaned_data["postal_code"]
+        nip = form.cleaned_data["nip"]
+        available_days = form.cleaned_data["available_days"]
+        capacity = form.cleaned_data["capacity"]
+        type = form.cleaned_data["type"]
+        zone = form.cleaned_data["zone"]
+        Recycler.objects.create(
+            name=name,
+            street=street,
+            city=city,
+            postal_code=postal_code,
+            nip=nip,
+            available_days=available_days,
+            capacity=capacity,
+            type=type,
+            zone=zone
+        )
+        return result
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
 
 # WIDOKI ORDERS
 
