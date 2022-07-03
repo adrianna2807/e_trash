@@ -8,4 +8,5 @@ urlpatterns = [
     path("clients-update-view/<pk>", views.ClientUpdateView.as_view(), name="clients-update-view"),
     path("clients-delete-view/<pk>", views.ClientDeleteView.as_view(), name="clients-delete-view"),
     path("clients-model-form-view/", views.ClientModelFormView.as_view(), name = "clients-model-form-view"),
+    path("recyclers-model-form-view/", views.RecyclerModelFormView.as_view(), name = "recyclers-model-form-view"),
     ]

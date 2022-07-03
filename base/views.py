@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 
-from base.forms import ClientModelForm, AddressModelForm
+from base.forms import ClientModelForm, AddressModelForm, RecyclerModelForm
 from base.models import Client, Address
 #testy do forms, walidacji i FormView
 #zmienić na FormView i przypisać adres do klienta
@@ -40,5 +40,9 @@ class ClientDeleteView(DeleteView):
     template_name = "clients_delete.html"
     success_url = reverse_lazy("homepage")
 
+# WIDOKI RECYCLER
 
-
+class RecyclerModelFormView(FormView):
+    template_name = "form.html"
+    form_class = RecyclerModelForm
+    success_url = reverse_lazy("homepage")

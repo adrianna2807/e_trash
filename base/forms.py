@@ -13,7 +13,8 @@ from django.core.exceptions import ValidationError
 
 #import pytz
 
-from base.models import Client, Address
+from base.models import Client, Address, Recycler
+
 
 #utc = pytz.UTC
 
@@ -35,17 +36,10 @@ class AddressModelForm(ModelForm):
 
 #FORMULARZE RECYCLER
 
-# def small_first_validator(value):
-#     if value[0].isupper():
-#         raise ValidationError('Value must be wrote with small letters.')
-#
-# class PollModelForm(ModelForm):
-#     class Meta:
-#         model = Poll
-#         fields = "__all__"
-#
-#     def clean_poll_name(self):
-#         return self.cleaned_data["name"].upper()
+class RecyclerModelForm(ModelForm):
+    class Meta:
+        model = Recycler
+        fields = "__all__"
 
 
 #FORMULARZE ORDER
