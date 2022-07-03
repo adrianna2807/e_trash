@@ -1,0 +1,13 @@
+{% extends "base.html" %}
+{% block content %}
+<form method="post">
+    {% csrf_token %}
+    <h5>Podaj swoje dane:</h5>
+    {{ form.as_p }}
+    {% if form_2 %}
+    <h5>Podaj adres:</h5>
+    {{form_2.as_p }}
+    {% endif %}
+<input type="submit" value="Submit">
+</form>
+{% endblock %}

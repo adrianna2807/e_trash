@@ -21,13 +21,13 @@ from base.models import Client, Address, Recycler, Order
 
 #FORMULARZE CLIENT
 
-class ClientModelForm(ModelForm):
+class ClientForm(ModelForm):
     class Meta:
         model = Client
         fields = "__all__"
 
 
-class AddressModelForm(ModelForm):
+class AddressForm(ModelForm):
     class Meta:
         model = Address
         fields = "__all__"
