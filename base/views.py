@@ -1,7 +1,7 @@
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 
-from base.forms import ClientModelForm, AddressModelForm, RecyclerModelForm
+from base.forms import ClientModelForm, AddressModelForm, RecyclerModelForm, OrderModelForm
 from base.models import Client, Address
 #testy do forms, walidacji i FormView
 #zmienić na FormView i przypisać adres do klienta
@@ -45,4 +45,11 @@ class ClientDeleteView(DeleteView):
 class RecyclerModelFormView(FormView):
     template_name = "form.html"
     form_class = RecyclerModelForm
+    success_url = reverse_lazy("homepage")
+
+# WIDOKI ORDERS
+
+class OrderModelFormView(FormView):
+    template_name = "form.html"
+    form_class = OrderModelForm
     success_url = reverse_lazy("homepage")

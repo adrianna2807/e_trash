@@ -13,7 +13,7 @@ from django.core.exceptions import ValidationError
 
 #import pytz
 
-from base.models import Client, Address, Recycler
+from base.models import Client, Address, Recycler, Order
 
 
 #utc = pytz.UTC
@@ -44,11 +44,7 @@ class RecyclerModelForm(ModelForm):
 
 #FORMULARZE ORDER
 
-# def small_validator(value):
-#     if value.isupper():
-#         raise ValidationError('Value must be wrote with small letters.')
-#
-# class AnswerModelForm(ModelForm):
-#     class Meta:
-#         model = Answer
-#         fields = "__all__"
+class OrderModelForm(ModelForm):
+    class Meta:
+        model = Order
+        fields = "__all__"
