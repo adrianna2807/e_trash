@@ -40,7 +40,7 @@ INSTALLED_APPS = [
     'base',
     'trash',
     'accounts',
-    'django_extensions'
+    'django_extensions',
 ]
 
 MIDDLEWARE = [

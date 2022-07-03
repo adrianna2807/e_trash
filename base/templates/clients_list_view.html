@@ -1,6 +1,6 @@
 {% extends "base.html" %}
 {% block content %}
     {% for c in client_list %}
-        <li>{{ c.id }} {{c.name}} {{c.last_name}}</li>
+        <li>{{ c.id }} {{c.first_name}} {{c.last_name}}</li>
     {% endfor %}
 {% endblock %}

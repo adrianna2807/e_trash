@@ -48,7 +48,7 @@ class Recycler(models.Model):
     city = models.CharField(max_length=128)
     postal_code = models.PositiveSmallIntegerField(max_length=5)
     nip = models.IntegerField(max_length=10)
-    available_days = models.ManyToManyField(Availability)
+    available_days = models.ManyToManyField(Availability, choices=Availability.DAYS)
     capacity = models.SmallIntegerField(choices=CAPACITY_VALUES, max_length=1, default='1')
     type = models.ForeignKey(
         Trash, on_delete=models.CASCADE, related_name="recyclers", blank=True, null=True
@@ -77,12 +77,12 @@ class Order(models.Model):
     )
     order_number = models.CharField(max_length=128)  # jakas walidacja ze bedzie automatycznie nadawać?
     order_day = models.ForeignKey(
-        Availability, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
+        Availability, choices=Availability.DAYS, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
     order_time = models.CharField(choices=TIME_INTERVALS, default='ZERO', max_length=128)
     order_date = models.DateTimeField(auto_now_add=True)
     trash_type = models.ForeignKey(
-        Trash, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
+        Trash, choices=Trash.TRASHES, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
 
     def __str__(self):
