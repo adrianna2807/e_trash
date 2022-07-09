@@ -3,8 +3,8 @@ from django.shortcuts import render
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 
-from base.forms import  OrderModelForm, ClientForm, AddressForm, RecyclerForm
-from base.models import Client, Address, Recycler
+from base.forms import ClientForm, AddressForm, RecyclerForm, OrderForm
+from base.models import Client, Address, Recycler, Order
 
 
 #testy do forms, walidacji i FormView
@@ -92,7 +92,30 @@ class RecyclerFormView(FormView):
 
 # WIDOKI ORDERS
 
-class OrderModelFormView(FormView):
+class OrderFormView(FormView):
     template_name = "form.html"
-    form_class = OrderModelForm
+    form_class = OrderForm
     success_url = reverse_lazy("homepage")
+
+    def form_valid(self, form):
+        result = super().form_valid(form)
+        order_number = form.cleaned_data["order_number"]
+        order_day = form.cleaned_data["order_day"]
+        order_time = form.cleaned_data["order_time"]
+        order_date = form.cleaned_data["order_date"]
+        zone = form.cleaned_data["zone"]
+        address = form.cleaned_data["address"]
+        trash_type = form.cleaned_data["trash_type"]
+        Order.objects.create(
+            order_number=order_number,
+            order_day=order_day,
+            order_time=order_time,
+            order_date=order_date,
+            zone=zone,
+            address=address,
+            trash_type=trash_type,
+        )
+        return result
+
+    def form_invalid(self, form):
+        return super().form_invalid(form)
