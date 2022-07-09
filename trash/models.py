@@ -1,12 +1,20 @@
 from django.db import models
 
 
-class Trash(models.Model):
-    TRASHES = [('EW', 'Electrical Waste'), ('RW', 'Recycled Waste'), ('HW','Hazardous Waste'), ('LSW','Large Size Waste')]
-    type = models.CharField(choices=TRASHES, max_length=3)
+class Trash(models.TextChoices):
+    ELECTRICAL = 'EW', 'Electrical Waste',
+    RECYCLED = 'RW', 'Recycled Waste',
+    HAZARDOUS = 'HW', 'Hazardous Waste',
+    LARGE = 'LSW', 'Large Size Waste'
+type = models.CharField(choices=Trash.choices, max_length=32)
 
-    def __str__(self):
-        return f"{self.type}"
+
+class Meta:
+    verbose_name_plural = "Trashes"
+
+def __str__(self):
+    return f"{self.type}"
+
 
 
 class EWaste(models.Model):
