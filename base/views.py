@@ -102,7 +102,7 @@ class OrderFormView(FormView):
         order_number = form.cleaned_data["order_number"]
         order_day = form.cleaned_data["order_day"]
         order_time = form.cleaned_data["order_time"]
-        order_date = form.cleaned_data["order_date"]
+        # order_date = form.cleaned_data["order_date"]
         zone = form.cleaned_data["zone"]
         address = form.cleaned_data["address"]
         trash_type = form.cleaned_data["trash_type"]
@@ -110,7 +110,7 @@ class OrderFormView(FormView):
             order_number=order_number,
             order_day=order_day,
             order_time=order_time,
-            order_date=order_date,
+            # order_date=order_date,
             zone=zone,
             address=address,
             trash_type=trash_type,

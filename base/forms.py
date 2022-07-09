@@ -96,7 +96,7 @@ class OrderForm(Form):
     order_number = OrderNumberField(max_length=128, label="Numer zamówienia:")
     order_day = OrderDateField(choices=Availability.choices, label= "Wybierz dzień odbioru odpadów:")
     order_time = OrderTimeField(choices=TimeInterval.choices, label= "Wybierz godzinę odbioru odpadów:")
-    order_date = DateTimeField()#tu chcę automatycznie dodającą się aktualną datę
+    # order_date = DateTimeField()#tu chcę automatycznie dodającą się aktualną datę
     zone = ModelChoiceField(queryset=Zone.objects.all(), label="Strefy odbioru odpadów:")
     address = ModelChoiceField(queryset=Address.objects.all(), label="Adres odbioru:")
     # city = CharField(max_length=128, label="Miasto:")
