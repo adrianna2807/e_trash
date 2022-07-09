@@ -8,6 +8,7 @@
 
 from datetime import datetime
 
+from django import forms
 from django.core.validators import RegexValidator
 from django.db.models import Count
 from django.forms import CharField, Form, DateField, ModelForm, ModelChoiceField, DateTimeField, IntegerField, MultipleChoiceField, ChoiceField, ModelMultipleChoiceField
@@ -92,15 +93,22 @@ class OrderTimeField(ChoiceField):
                 "Brak dostępnych odbiorców w wybranych godzinach, prosimy o wybranie innego terminu"
             )
 
-class OrderForm(Form):
-    order_number = OrderNumberField(max_length=128, label="Numer zamówienia:")
-    order_day = OrderDateField(choices=Availability.choices, label= "Wybierz dzień odbioru odpadów:")
-    order_time = OrderTimeField(choices=TimeInterval.choices, label= "Wybierz godzinę odbioru odpadów:")
-    # order_date = DateTimeField()#tu chcę automatycznie dodającą się aktualną datę
-    zone = ModelChoiceField(queryset=Zone.objects.all(), label="Strefy odbioru odpadów:")
-    address = ModelChoiceField(queryset=Address.objects.all(), label="Adres odbioru:")
-    # city = CharField(max_length=128, label="Miasto:")
-    # postal_code= CharField(max_length=128, label="Kod pocztowy:")
-    trash_type = MultipleChoiceField(choices=Trash.choices, label="Rodzaj odpadów:")
+# class OrderForm(Form):
+#     order_number = OrderNumberField(max_length=128, label="Numer zamówienia:")
+#     order_day = OrderDateField(choices=Availability.choices, label= "Wybierz dzień odbioru odpadów:")
+#     order_time = OrderTimeField(choices=TimeInterval.choices, label= "Wybierz godzinę odbioru odpadów:")
+#     # order_date = DateTimeField()#tu chcę automatycznie dodającą się aktualną datę
+#     zone = ModelChoiceField(queryset=Zone.objects.all(), label="Strefy odbioru odpadów:")
+#     address = ModelChoiceField(queryset=Address.objects.all(), label="Adres odbioru:")
+#     # city = CharField(max_length=128, label="Miasto:")
+#     # postal_code= CharField(max_length=128, label="Kod pocztowy:")
+#     trash_type = MultipleChoiceField(choices=Trash.choices, label="Rodzaj odpadów:")
+
+class OrderForm(forms.ModelForm):
+    client = forms.ModelChoiceField(widget = forms.HiddenInput(), required = False, queryset=None)
+    class Meta:
+        model = Order
+        fields = ['order_number' , 'order_day' , 'order_time' , 'zone' , 'address', 'trash_type', 'client']
+
 
 

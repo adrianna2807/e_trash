@@ -60,7 +60,7 @@ class ClientDeleteView(LoginRequiredMixin,DeleteView):
 
 # WIDOKI RECYCLER
 
-class RecyclerFormView(FormView):
+class RecyclerFormView(LoginRequiredMixin,FormView):
     template_name = "form.html"
     form_class = RecyclerForm
     success_url = reverse_lazy("homepage")
@@ -94,7 +94,7 @@ class RecyclerFormView(FormView):
 
 # WIDOKI ORDERS
 
-class OrderFormView(FormView):
+class OrderFormView(LoginRequiredMixin,FormView):
     template_name = "form.html"
     form_class = OrderForm
     success_url = reverse_lazy("homepage")
@@ -127,8 +127,9 @@ def order_user(request):
     if request.method == "POST":
         form = OrderForm(request.POST)
         if form.is_valid():
+            form.instance.client = request.user.client
             form.save()
-            trash = form.cleaned_data["trash"]
+            trash = form.cleaned_data["trash_type"]
             if trash == "EW":
                 return redirect("/trash/ewastes-create-view/")
             if trash == "RW":

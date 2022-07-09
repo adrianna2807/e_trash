@@ -10,4 +10,5 @@ urlpatterns = [
     path("clients-form-view/", views.client_address_create, name = "clients-form-view"),
     path("recyclers-form-view/", views.RecyclerFormView.as_view(), name = "recyclers-form-view"),
     path("orders-form-view/", views.OrderFormView.as_view(), name = "orders-form-view"),
+    path("orders-user-view/", views.order_user, name = "orders-user-view")
     ]

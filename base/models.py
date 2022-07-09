@@ -1,6 +1,7 @@
 from django.db import models
 
 from trash.models import Trash
+from django.contrib.auth.models import User
 
 
 class Zone(models.Model):
@@ -23,6 +24,7 @@ class Address(models.Model):
 
 
 class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     first_name = models.CharField(max_length=128)
     last_name = models.CharField(max_length=128)
     email = models.CharField(max_length=128) #walidacja
@@ -61,13 +63,13 @@ class Recycler(models.Model):
     def __str__(self):
         return f"{self.name} "
 
-class TimeInterval(models.IntegerChoices):
-    INTERVAL_0 = 0, 'Wybierz godzinę odbioru',
-    INTERVAL_1 = 1, '8.00 - 10.00',
-    INTERVAL_2 = 2, '10.00 - 12.00',
-    INTERVAL_3 = 3, '12.00 - 14.00',
-    INTERVAL_4 = 4, '14.00 - 16.00',
-    INTERVAL_5 = 5, '16.00 - 18.00'
+class TimeInterval(models.TextChoices):
+    INTERVAL_0 = '0', 'Wybierz godzinę odbioru',
+    INTERVAL_1 = '1', '8.00 - 10.00',
+    INTERVAL_2 = '2', '10.00 - 12.00',
+    INTERVAL_3 = '3', '12.00 - 14.00',
+    INTERVAL_4 = '4', '14.00 - 16.00',
+    INTERVAL_5 = '5', '16.00 - 18.00'
 
 hour = models.CharField(choices=TimeInterval.choices, max_length=32)
 
