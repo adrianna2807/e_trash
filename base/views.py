@@ -3,6 +3,7 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, request
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
+from django.views import View
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
 
 from base.forms import ClientForm, AddressForm, RecyclerForm, OrderForm
