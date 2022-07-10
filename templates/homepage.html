@@ -1,4 +1,10 @@
 {% extends "base.html" %}
 {% block content %}
 <p>Welcome, {{ user }}!</p>
+
+
+<p><a href="{% url 'homepage-client' %}">Panel Klienta</a></p>
+<p><a href="{% url 'homepage-recycler' %}">Panel Firmy Utylizacyjnej</a></p>
+
+
 {% endblock %}
