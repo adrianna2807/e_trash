@@ -5,36 +5,39 @@ from django.contrib.auth.models import User
 
 
 class Zone(models.Model):
-    name = models.CharField(max_length=128)
+    name = models.CharField("Strefa", max_length=128)
 
     def __str__(self):
         return f"{self.name}"
 
 
+class Client(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
+    first_name = models.CharField("Imię", max_length=128)
+    last_name = models.CharField("Nazwisko", max_length=128)
+    email = models.CharField("Adres email", max_length=128) #walidacja
+    phone = models.IntegerField("Telefon", max_length=9) #walidacja przedrostek
+    strefa = models.ForeignKey(
+        Zone, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
+     )
+
+    def __str__(self):
+        return f"{self.first_name} {self.last_name}"
+
+
 class Address(models.Model):
-    street = models.CharField(max_length=128)
-    city = models.CharField(max_length=128)
-    postal_code = models.PositiveSmallIntegerField(max_length=5)
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, related_name="addresses", blank=True, null=True
+    )
+    street = models.CharField("Ulica", max_length=128)
+    city = models.CharField("Miasto", max_length=128)
+    postal_code = models.PositiveSmallIntegerField("Kod pocztowy", max_length=5)
 
     class Meta:
         verbose_name_plural = "Addresses"
 
     def __str__(self):
         return f"{self.street} {self.city} {self.postal_code}"
-
-
-class Client(models.Model):
-    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
-    first_name = models.CharField(max_length=128)
-    last_name = models.CharField(max_length=128)
-    email = models.CharField(max_length=128) #walidacja
-    phone = models.IntegerField(max_length=9) #walidacja przedrostek
-    zone = models.ForeignKey(
-       Zone, on_delete=models.CASCADE, related_name="clients", blank=True, null=True
-     )
-
-    def __str__(self):
-        return f"{self.first_name} {self.last_name}"
 
 
 class Availability(models.TextChoices):
@@ -48,6 +51,7 @@ day = models.CharField(max_length=15, choices=Availability.choices)
 
 
 class Recycler(models.Model):
+    user = models.OneToOneField(User, on_delete=models.CASCADE, null=True)
     CAPACITY_VALUES = [('1', '1'), ('2', '2'), ('3', '3'), ('4', '4'), ('5', '5')]
     name = models.CharField(max_length=128)
     street = models.CharField(max_length=128)

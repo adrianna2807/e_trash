@@ -29,12 +29,14 @@ def capitalized_validator(value):
 #FORMULARZE CLIENT
 
 class ClientForm(ModelForm):
+    user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
     class Meta:
         model = Client
         fields = "__all__"
 
 
 class AddressForm(ModelForm):
+    client = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
     class Meta:
         model = Address
         fields = "__all__"
@@ -44,13 +46,14 @@ class AddressForm(ModelForm):
 #FORMULARZE RECYCLER
 
 class RecyclerForm(Form):
+    user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
     name = CharField(max_length=128, label="Nazwa firmy:")
     street = CharField(max_length=128, label="Adres firmy:")
     city = CharField(max_length=128, label="Miasto:")
     postal_code = CharField(max_length=128, label="Kod pocztowy:")
     nip = CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')], label="Numer NIP:")
     available_days = MultipleChoiceField(choices=Availability.choices, label="Dostępne dni odbiorów w godz. 8.00 - 18.00:")
-    capacity = ChoiceField(choices=Recycler.CAPACITY_VALUES, label="Ilość klienta możliwa do obsłużenia w ciągu 2 godzin:")
+    capacity = ChoiceField(choices=Recycler.CAPACITY_VALUES, label="Ilość klientów możliwa do obsłużenia w ciągu 2 godzin:")
     type = MultipleChoiceField(choices=Trash.choices, label="Rodzaje odbieranych odpadów:")
     zone = ModelChoiceField(queryset=Zone.objects.all(), label="Strefy odbioru odpadów:")
 

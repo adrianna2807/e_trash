@@ -1,6 +1,6 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse
+from django.http import HttpResponse, request
 from django.shortcuts import render, redirect
 from django.urls import reverse_lazy, reverse
 from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
@@ -22,13 +22,13 @@ def client_address_create(request):
         last_name = form.cleaned_data["last_name"]
         email = form.cleaned_data["email"]
         phone = form.cleaned_data["phone"]
-        zone = form.cleaned_data["zone"]
+        strefa = form.cleaned_data["strefa"]
         street = form_2.cleaned_data["street"]
         city = form_2.cleaned_data["city"]
         postal_code = form_2.cleaned_data["postal_code"]
-        Client.objects.create(first_name=first_name, last_name=last_name, email=email, phone=phone, zone=zone)
-        Address.objects.create(street=street, city=city, postal_code=postal_code)
-        return HttpResponse("IT WORKED")
+        client = Client.objects.create(user=request.user, first_name=first_name, last_name=last_name, email=email, phone=phone, strefa=strefa)
+        Address.objects.create(user=request.user, street=street, city=city, postal_code=postal_code)
+        return redirect("homepage")
     return render(
         request,
         template_name="client_address.html",
@@ -77,6 +77,7 @@ class RecyclerFormView(LoginRequiredMixin,FormView):
         type = form.cleaned_data["type"]
         zone = form.cleaned_data["zone"]
         Recycler.objects.create(
+            user=self.request.user,
             name=name,
             street=street,
             city=city,
@@ -99,28 +100,28 @@ class OrderFormView(LoginRequiredMixin,FormView):
     form_class = OrderForm
     success_url = reverse_lazy("homepage")
 
-    def form_valid(self, form):
-        result = super().form_valid(form)
-        order_number = form.cleaned_data["order_number"]
-        order_day = form.cleaned_data["order_day"]
-        order_time = form.cleaned_data["order_time"]
-        # order_date = form.cleaned_data["order_date"]
-        zone = form.cleaned_data["zone"]
-        address = form.cleaned_data["address"]
-        trash_type = form.cleaned_data["trash_type"]
-        Order.objects.create(
-            order_number=order_number,
-            order_day=order_day,
-            order_time=order_time,
-            # order_date=order_date,
-            zone=zone,
-            address=address,
-            trash_type=trash_type,
-        )
-        return result
-
-    def form_invalid(self, form):
-        return super().form_invalid(form)
+    # def form_valid(self, form):
+    #     result = super().form_valid(form)
+    #     order_number = form.cleaned_data["order_number"]
+    #     order_day = form.cleaned_data["order_day"]
+    #     order_time = form.cleaned_data["order_time"]
+    #     # order_date = form.cleaned_data["order_date"]
+    #     zone = form.cleaned_data["zone"]
+    #     address = form.cleaned_data["address"]
+    #     trash_type = form.cleaned_data["trash_type"]
+    #     Order.objects.create(
+    #         order_number=order_number,
+    #         order_day=order_day,
+    #         order_time=order_time,
+    #         # order_date=order_date,
+    #         zone=zone,
+    #         address=address,
+    #         trash_type=trash_type,
+    #     )
+    #     return result
+    #
+    # def form_invalid(self, form):
+    #     return super().form_invalid(form)
 
 @login_required
 def order_user(request):
