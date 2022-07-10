@@ -29,6 +29,7 @@ def capitalized_validator(value):
 #FORMULARZE CLIENT
 
 class ClientForm(ModelForm):
+    user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
     class Meta:
         model = Client
         fields = "__all__"

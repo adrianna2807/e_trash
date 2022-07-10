@@ -1,8 +1,10 @@
+from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.shortcuts import render
+from django.shortcuts import render, redirect
 from django.urls import reverse_lazy
 from django.views.generic import CreateView, DetailView, UpdateView, DeleteView, ListView
 
+from trash.forms import OrderEwasteForm, OrderRwasteForm, OrderHwasteForm, OrderLswasteForm
 from trash.models import Trash, EWaste, RWaste, HWaste, LSWaste
 
 
@@ -130,3 +132,53 @@ class LSWasteDeleteView(LoginRequiredMixin, DeleteView):
     model = LSWaste
     template_name = "delete_lswaste.html"
     success_url = reverse_lazy("homepage")
+
+
+@login_required
+def order_ewaste(request):
+    if request.method == "POST":
+        form = OrderEwasteForm(request.POST)
+        if form.is_valid():
+            form.instance.client = request.user.client
+            form.save()
+            return redirect("/homepage/")
+    else:
+        form = OrderEwasteForm
+    return render(request, 'form.html', {"form":form})
+
+@login_required
+def order_rwaste(request):
+    if request.method == "POST":
+        form = OrderRwasteForm(request.POST)
+        if form.is_valid():
+            form.instance.client = request.user.client
+            form.save()
+            return redirect("/homepage/")
+    else:
+        form = OrderRwasteForm
+    return render(request, 'form.html', {"form":form})
+
+@login_required
+def order_hwaste(request):
+    if request.method == "POST":
+        form = OrderHwasteForm(request.POST)
+        if form.is_valid():
+            form.instance.client = request.user.client
+            form.save()
+            return redirect("/homepage/")
+    else:
+        form = OrderHwasteForm
+    return render(request, 'form.html', {"form":form})
+
+
+@login_required
+def order_lswaste(request):
+    if request.method == "POST":
+        form = OrderLswasteForm(request.POST)
+        if form.is_valid():
+            form.instance.client = request.user.client
+            form.save()
+            return redirect("/homepage/")
+    else:
+        form = OrderLswasteForm
+    return render(request, 'form.html', {"form":form})

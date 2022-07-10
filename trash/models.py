@@ -1,59 +1,76 @@
+from django.contrib.auth.models import User
 from django.db import models
 
 
+
+
 class Trash(models.TextChoices):
-    ELECTRICAL = 'EW', 'Electrical Waste',
-    RECYCLED = 'RW', 'Recycled Waste',
-    HAZARDOUS = 'HW', 'Hazardous Waste',
-    LARGE = 'LSW', 'Large Size Waste'
+    ELECTRICAL = 'Odpad Elektryczny', 'Odpad Elektryczny',
+    RECYCLED = 'Odpady z Recyklingu', 'Odpady z Recyklingu',
+    HAZARDOUS = 'Niebezpieczne Odpady', 'Niebezpieczne Odpady',
+    LARGE = 'Wielkogabarytowe Odpady', 'Wielkogabarytowe Odpady'
+
+
 type = models.CharField(choices=Trash.choices, max_length=32)
 
 
 class Meta:
     verbose_name_plural = "Trashes"
 
+
 def __str__(self):
     return f"{self.type}"
 
 
-
 class EWaste(models.Model):
-    EWASTES = [('DS','dishwasher'), ('TV','TV'), ('LP','laptop'), ('inne','inne')]
-    type = models.CharField(choices=EWASTES, max_length=4)
-    height = models.PositiveSmallIntegerField(max_length=5)
-    width = models.PositiveSmallIntegerField(max_length=5)
-    length = models.PositiveSmallIntegerField(max_length=5)
-    weight = models.PositiveSmallIntegerField(max_length=5)
+    EWASTES = [('Zmywarka', 'Zmywarka'), ('TV', 'TV'), ('Laptop', 'Laptop'), ('Pralka', 'Pralka'), ('Lodówka', 'Lodówka'),
+               ('Monitor', 'Monitor'), ('Mikrofalówka', 'Mikrofalówka'), ('Odkurzacz', 'Odkurzacz'), ('Kuchenka', 'Kuchenka'),
+               ('Piekarnik', 'Piekarnik'), ('Inne', 'Inne')]
+    client = models.ForeignKey(
+        'base.Client', on_delete=models.CASCADE, related_name="ewastes", blank=True, null=True)
+    type = models.CharField('Wybierz rodzaj odpadów:', choices=EWASTES, max_length=20)
+    height = models.PositiveSmallIntegerField('Wysokość:', max_length=5)
+    width = models.PositiveSmallIntegerField('Szerokość:', max_length=5)
+    length = models.PositiveSmallIntegerField('Długość:', max_length=5)
+    weight = models.PositiveSmallIntegerField('Waga:', max_length=5)
 
     def __str__(self):
         return f"{self.type}"
 
 
 class RWaste(models.Model):
-    RWASTES = [('paper','paper'), ('plastic','plastic'), ('glass','glass'), ('bio','bio')]
-    type = models.CharField(choices=RWASTES, max_length=10)
-    trash_amount = models.PositiveSmallIntegerField(max_length=5)
+    RWASTES = [('Papier', 'Papier'), ('Plastik', 'Plastik'), ('Szkło', 'Szkło'), ('BIO', 'BIO')]
+    client = models.ForeignKey(
+        'base.Client', on_delete=models.CASCADE, related_name="rwastes", blank=True, null=True)
+    type = models.CharField('Wybierz rodzaj odpadów:', choices=RWASTES, max_length=10)
+    trash_amount = models.PositiveSmallIntegerField('Pojemność worków(l)', max_length=5)
 
     def __str__(self):
         return f"{self.type}"
 
 
 class HWaste(models.Model):
-    HWASTES = [('pai','paint'),('oil', 'oil'),('med', 'medicine'), ('oth','other')]
-    type = models.CharField(choices=HWASTES, max_length=3)
-    trash_amount = models.PositiveSmallIntegerField(max_length=5)
+    HWASTES = [('Farby', 'Farby'), ('Oleje', 'Oleje'), ('Leki', 'Leki'), ('Baterie', 'Baterie'), ('Żarówki', 'Żarówki'),
+               ('Tonery', 'Tonery'), ('Inne', 'Inne')]
+    client = models.ForeignKey(
+        'base.Client', on_delete=models.CASCADE, related_name="Hwastes", blank=True, null=True)
+    type = models.CharField('Odpad', choices=HWASTES, max_length=10)
+    trash_amount = models.PositiveSmallIntegerField('Ilość(l/kg/szt)', max_length=5)
 
     def __str__(self):
         return f"{self.type}"
 
 
 class LSWaste(models.Model):
-    LSWASTES = [('fur','furniture'), ('rub','rubble'), ('oth','other')]
-    type = models.CharField(choices=LSWASTES, max_length=3)
-    height = models.PositiveSmallIntegerField(max_length=5)
-    width = models.PositiveSmallIntegerField(max_length=5)
-    length = models.PositiveSmallIntegerField(max_length=5)
-    weight = models.PositiveSmallIntegerField(max_length=5)
+    LSWASTES = [('Szafa', 'Szafa'), ('Fotel', 'Fotel'), ('Kanapa', 'Kanapa'), ('Stół', 'Stół'), ('Wanna', 'Wanna'),
+                ('Komoda', 'Komoda'), ('Umywalka', 'Umywalka'), ('Łóżko', 'Łóżko'), ('Inne' , 'Inne')]
+    client = models.ForeignKey(
+        'base.Client', on_delete=models.CASCADE, related_name="lswastes", blank=True, null=True)
+    type = models.CharField('Wybierz rodzaj odpadów:', choices=LSWASTES, max_length=10)
+    height = models.PositiveSmallIntegerField('Wysokość:', max_length=5)
+    width = models.PositiveSmallIntegerField('Szerokość:', max_length=5)
+    length = models.PositiveSmallIntegerField('Długość:', max_length=5)
+    weight = models.PositiveSmallIntegerField('Waga:', max_length=5)
 
     def __str__(self):
         return f"{self.type}"

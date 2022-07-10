@@ -2,13 +2,13 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    <p>Do you really want to delete:</p>
-    <p>EWASTE ID: {{ ewaste.id }}</p>
-    <p>EWASTE : {{ ewaste.type }}</p>
-    <p>HEIGHT: {{ ewaste.height }}</p>
-    <p>WIDTH: {{ ewaste.width }}</p>
-    <p>LENGTH: {{ ewaste.length }}</p>
-    <p>WEIGHT: {{ ewaste.weight }}</p>
-    <p><input type="submit" value="Delete"></p>
+    <p>Czy na pewno chcesz anulować zamówienie:</p>
+<!--    <p>EWASTE ID: {{ ewaste.id }}</p>-->
+    <p>Elektroniczny odpad: : {{ ewaste.type }}</p>
+    <p>Wysokość: {{ ewaste.height }}</p>
+    <p>Szerokość: {{ ewaste.width }}</p>
+    <p>Długość: {{ ewaste.length }}</p>
+    <p>Waga: {{ ewaste.weight }}</p>
+    <p><input type="submit" value="Anuluj"></p>
 </form>
 {% endblock %}

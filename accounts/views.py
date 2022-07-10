@@ -12,3 +12,4 @@ class RegisterUser(CreateView):
 
 class HomepageView(TemplateView):
     template_name = "homepage.html"
+

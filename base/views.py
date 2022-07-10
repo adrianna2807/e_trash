@@ -28,6 +28,7 @@ def client_address_create(request):
         postal_code = form_2.cleaned_data["postal_code"]
         Client.objects.create(first_name=first_name, last_name=last_name, email=email, phone=phone, zone=zone)
         Address.objects.create(street=street, city=city, postal_code=postal_code)
+
         return HttpResponse("IT WORKED")
     return render(
         request,
@@ -130,14 +131,18 @@ def order_user(request):
             form.instance.client = request.user.client
             form.save()
             trash = form.cleaned_data["trash_type"]
-            if trash == "EW":
-                return redirect("/trash/ewastes-create-view/")
-            if trash == "RW":
-                return redirect("/trash/rwastes-create-view/")
-            if trash == "HW":
-                return redirect("/trash/hwastes-create-view/")
-            if trash == "LSW":
-                return redirect("/trash/lswastes-create-view/")
+            if trash == "Odpad Elektryczny":
+                # return redirect("/trash/ewastes-create-view/")
+                return redirect("/trash/orders-ewaste/")
+            if trash == "Odpady z Recyklingu":
+                # return redirect("/trash/rwastes-create-view/")
+                return redirect("/trash/orders-rwaste/")
+            if trash == "Niebezpieczne Odpady":
+                # return redirect("/trash/hwastes-create-view/")
+                return redirect("/trash/orders-hwaste/")
+            if trash == "Wielkogabarytowe Odpady":
+                # return redirect("/trash/lswastes-create-view/")
+                return redirect("/trash/orders-lswaste/")
 
     else:
         form = OrderForm

@@ -2,13 +2,13 @@
 {% block content %}
 <form method="post">
     {% csrf_token %}
-    <p>Do you really want to delete:</p>
-    <p>LSWASTE ID: {{ lswaste.id }}</p>
-    <p>LSWASTE : {{ lswaste.type }}</p>
-    <p>HEIGHT: {{ lswaste.height }}</p>
-    <p>WIDTH: {{ lswaste.width }}</p>
-    <p>LENGTH: {{ lswaste.length }}</p>
-    <p>WEIGHT: {{ lswaste.weight }}</p>
-    <p><input type="submit" value="Delete"></p>
+    <p>Czy na pewno chcesz anulować zamówienie:</p>
+<!--    <p>LSWASTE ID: {{ lswaste.id }}</p>-->
+    <p>Wielkogabarytowy odpad: {{ lswaste.type }}</p>
+    <p>Wysokość: {{ lswaste.height }}</p>
+    <p>Szerokość: {{ lswaste.width }}</p>
+    <p>Długość: {{ lswaste.length }}</p>
+    <p>Waga: {{ lswaste.weight }}</p>
+    <p><input type="submit" value="Anuluj"></p>
 </form>
 {% endblock %}
