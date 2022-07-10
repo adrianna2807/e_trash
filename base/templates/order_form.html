@@ -1,0 +1,10 @@
+{% extends "base.html" %}
+{% block content %}
+<h4>FORMULARZ ZAMÓWIENIA ODBIORU ODPADÓW</h4>
+<p> </p>
+<form method="post">
+    {% csrf_token %}
+    {{ form.as_p }}
+    <input type="submit" value="Wyślij">
+</form>
+{% endblock %}

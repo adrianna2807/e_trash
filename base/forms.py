@@ -11,14 +11,14 @@ from datetime import datetime
 from django import forms
 from django.core.validators import RegexValidator
 from django.db.models import Count
-from django.forms import CharField, Form, DateField, ModelForm, ModelChoiceField, DateTimeField, IntegerField, MultipleChoiceField, ChoiceField, ModelMultipleChoiceField
+from django.forms import CharField, Form, ModelForm, ModelChoiceField, MultipleChoiceField, ChoiceField
 from django.core.exceptions import ValidationError
 
-#import pytz
+# import pytz
 
 from base.models import Client, Address, Recycler, Order, Availability, Zone, RecyclerAssignedOrders, TimeInterval
 
-#utc = pytz.UTC
+# utc = pytz.UTC
 from trash.models import Trash
 
 
@@ -26,10 +26,12 @@ def capitalized_validator(value):
     if value[0].islower():
         raise ValidationError('Value must be capitalized.')
 
-#FORMULARZE CLIENT
+
+# FORMULARZE CLIENT
 
 class ClientForm(ModelForm):
     user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
+
     class Meta:
         model = Client
         fields = "__all__"
@@ -37,13 +39,13 @@ class ClientForm(ModelForm):
 
 class AddressForm(ModelForm):
     client = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
+
     class Meta:
         model = Address
         fields = "__all__"
 
 
-
-#FORMULARZE RECYCLER
+# FORMULARZE RECYCLER
 
 class RecyclerForm(Form):
     user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
@@ -52,8 +54,10 @@ class RecyclerForm(Form):
     city = CharField(max_length=128, label="Miasto:")
     postal_code = CharField(max_length=128, label="Kod pocztowy:")
     nip = CharField(max_length=10, validators=[RegexValidator(r'^\d{1,10}$')], label="Numer NIP:")
-    available_days = MultipleChoiceField(choices=Availability.choices, label="Dostępne dni odbiorów w godz. 8.00 - 18.00:")
-    capacity = ChoiceField(choices=Recycler.CAPACITY_VALUES, label="Ilość klientów możliwa do obsłużenia w ciągu 2 godzin:")
+    available_days = MultipleChoiceField(choices=Availability.choices,
+                                         label="Dostępne dni odbiorów w godz. 8.00 - 18.00:")
+    capacity = ChoiceField(choices=Recycler.CAPACITY_VALUES,
+                           label="Ilość klientów możliwa do obsłużenia w ciągu 2 godzin:")
     type = MultipleChoiceField(choices=Trash.choices, label="Rodzaje odbieranych odpadów:")
     zone = ModelChoiceField(queryset=Zone.objects.all(), label="Strefy odbioru odpadów:")
 
@@ -66,35 +70,81 @@ class RecyclerForm(Form):
     #             )
     #     return result
 
-#FORMULARZE ORDER
-
-class OrderNumberField(CharField):
-    def order_numeration(self, value):
-        value = f'ORD{Order.id}/2022'
-        return value
 
 
-class OrderDateField(ChoiceField):
-    def order_day_choice(self, value):
-        available_recyclers = Recycler.objects.filter(available_days=value)
-        if value in available_recyclers:
-            Order.objects.create()
-        else:
-            raise ValidationError(
-                "Brak dostępnych odbiorców w wybranym terminie, prosimy o wybranie innego dnia"
-            )
+
+# FORMULARZE ORDER
+
+# def order_numeration_validator(value):
+#     value = Order.order_number
+#     format_value = f'ORD{Order.id}/2022'
+#     return value
 
 
-class OrderTimeField(ChoiceField):
-    def order_time_choice(self, capacity):
-        assigned_orders = RecyclerAssignedOrders.objects.aggregate(Count('order_time'))
-        capacity = Recycler.objects.filter('capacity')
+def order_day_choice(value):
+    value = Order.order_day
+    available_recyclers = Recycler.objects.filter(available_days=value)
+    if value in available_recyclers:
+        Order.objects.create()
+    else:
+        raise ValidationError(
+            "Brak dostępnych odbiorców w wybranym terminie, prosimy o wybranie innego dnia"
+        )
+
+
+def order_time_choice(value):
+    value = Order.order_time
+    assigned_orders = RecyclerAssignedOrders.objects.aggregate(Count('order_time'))
+    capacity = Recycler.objects.filter('capacity')
+    if value:
         if assigned_orders <= capacity:
             Order.objects.create()
         else:
             raise ValidationError(
                 "Brak dostępnych odbiorców w wybranych godzinach, prosimy o wybranie innego terminu"
             )
+
+
+class OrderForm(forms.ModelForm):
+    client = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
+    order_number = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
+
+    class Meta:
+        model = Order
+        fields = ['order_day', 'order_time', 'strefa', 'adres', 'trash_type', 'client']
+
+
+# POPRZEDNIA WERSJA FORMULARZA Order
+#Zostawiona na wszelki wypadek
+
+# class OrderNumberField(CharField):
+#     def order_numeration(self, value):
+#         value = f'ORD{Order.id}/2022'
+#         return value
+
+
+# class OrderDateField(ChoiceField):
+#     def order_day_choice(self, value):
+#         available_recyclers = Recycler.objects.filter(available_days=value)
+#         if value in available_recyclers:
+#             Order.objects.create()
+#         else:
+#             raise ValidationError(
+#                 "Brak dostępnych odbiorców w wybranym terminie, prosimy o wybranie innego dnia"
+#             )
+
+
+# class OrderTimeField(ChoiceField):
+#     def order_time_choice(self, capacity):
+#         assigned_orders = RecyclerAssignedOrders.objects.aggregate(Count('order_time'))
+#         capacity = Recycler.objects.filter('capacity')
+#         if assigned_orders <= capacity:
+#             Order.objects.create()
+#         else:
+#             raise ValidationError(
+#                 "Brak dostępnych odbiorców w wybranych godzinach, prosimy o wybranie innego terminu"
+#             )
+
 
 # class OrderForm(Form):
 #     order_number = OrderNumberField(max_length=128, label="Numer zamówienia:")
@@ -106,12 +156,3 @@ class OrderTimeField(ChoiceField):
 #     # city = CharField(max_length=128, label="Miasto:")
 #     # postal_code= CharField(max_length=128, label="Kod pocztowy:")
 #     trash_type = MultipleChoiceField(choices=Trash.choices, label="Rodzaj odpadów:")
-
-class OrderForm(forms.ModelForm):
-    client = forms.ModelChoiceField(widget = forms.HiddenInput(), required = False, queryset=None)
-    class Meta:
-        model = Order
-        fields = ['order_number' , 'order_day' , 'order_time' , 'zone' , 'address', 'trash_type', 'client']
-
-
-

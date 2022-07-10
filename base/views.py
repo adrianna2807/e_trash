@@ -96,7 +96,7 @@ class RecyclerFormView(LoginRequiredMixin,FormView):
 # WIDOKI ORDERS
 
 class OrderFormView(LoginRequiredMixin,FormView):
-    template_name = "form.html"
+    template_name = "order_form.html"
     form_class = OrderForm
     success_url = reverse_lazy("homepage")
 

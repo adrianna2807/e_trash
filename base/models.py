@@ -68,7 +68,6 @@ class Recycler(models.Model):
         return f"{self.name} "
 
 class TimeInterval(models.TextChoices):
-    INTERVAL_0 = '0', 'Wybierz godzinę odbioru',
     INTERVAL_1 = '1', '8.00 - 10.00',
     INTERVAL_2 = '2', '10.00 - 12.00',
     INTERVAL_3 = '3', '12.00 - 14.00',
@@ -86,17 +85,17 @@ class Order(models.Model):
     recycler = models.ForeignKey(
         Recycler, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
-    order_number = models.CharField(auto_created=True, max_length=14)
-    order_day = models.CharField( choices=Availability.choices, default='PN', max_length=15)
-    order_time = models.CharField(choices=TimeInterval.choices, default=0, max_length=128)
+    order_number = models.CharField("Numer zamówienia", auto_created=True, max_length=14)
+    order_day = models.CharField("Wybierz dzień tygodnia", choices=Availability.choices, default='PN', max_length=15)
+    order_time = models.CharField("Wybierz godzinę odbioru", choices=TimeInterval.choices, default=0, max_length=128)
     order_date = models.DateTimeField(auto_now_add=True)
-    zone = models.ForeignKey(
+    strefa = models.ForeignKey(
         Zone, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
-    address = models.ForeignKey(
+    adres = models.ForeignKey(
         Address, on_delete=models.CASCADE, related_name="orders", blank=True, null=True
     )
-    trash_type = models.CharField(choices=Trash.choices, max_length=32)
+    trash_type = models.CharField("Wybierz typ odpadów", choices=Trash.choices, max_length=32)
 
     def __str__(self):
         return f"{self.order_number}"
