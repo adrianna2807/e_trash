@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<p>Welcome, {{ user }}!</p>
+
+
+<p><a href="{% url 'accounts:register-recycler' %}">Rejestracja</a></p>
+<p><a href=>Zaloguj się</a></p>
+
+{% endblock %}

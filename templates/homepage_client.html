@@ -1,0 +1,9 @@
+{% extends "base.html" %}
+{% block content %}
+<p>Welcome, {{ user }}!</p>
+
+
+<p><a href="{% url 'accounts:register-user' %}">Rejestracja</a></p>
+<p><a href="{% url 'base:orders-user-view' %}">Zaloguj się</a></p>
+
+{% endblock %}
