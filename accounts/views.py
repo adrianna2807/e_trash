@@ -8,7 +8,7 @@ class RegisterUser(CreateView):
     model = User
     template_name = "form.html"
     form_class = UserCreationForm
-    success_url = reverse_lazy("homepage")
+    success_url = reverse_lazy("base:clients-form-view")
 
 class HomepageView(TemplateView):
     template_name = "homepage.html"
