@@ -38,7 +38,7 @@ class ClientForm(ModelForm):
 
 
 class AddressForm(ModelForm):
-    client = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
+    user = forms.ModelChoiceField(widget=forms.HiddenInput(), required=False, queryset=None)
 
     class Meta:
         model = Address
