@@ -29,20 +29,31 @@ def client_address_create(request):
         postal_code = form_2.cleaned_data["postal_code"]
         client = Client.objects.create(user=request.user, first_name=first_name, last_name=last_name, email=email, phone=phone, strefa=strefa)
         Address.objects.create(user=request.user, street=street, city=city, postal_code=postal_code)
-        return redirect("homepage")
+        return redirect("/base/clients-detail-view/")
     return render(
         request,
         template_name="client_address.html",
         context={"form": form,
                      "form_2": form_2})
 
+class CurrentUserMixin(object):
+    model = Client
+
+    def get_object(self, *args, **kwargs):
+        return self.request.user.client
+        # try:
+        #     obj = super(CurrentUserMixin, self).get_object(*args, **kwargs)
+        # except AttributeError:
+        #     obj = self.request.user.client
+
+        # return obj
 
 class ClientListView(LoginRequiredMixin,ListView):
     template_name = "clients_list_view.html"
     model = Client
 
 
-class ClientDetailView(LoginRequiredMixin,DetailView):
+class ClientDetailView(LoginRequiredMixin,CurrentUserMixin, DetailView):
     model = Client
     template_name = "clients_detail_view.html"
 
