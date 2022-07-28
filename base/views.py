@@ -1,18 +1,17 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, request
 from django.shortcuts import render, redirect
-from django.urls import reverse_lazy, reverse
-from django.views import View
-from django.views.generic import CreateView, ListView, DetailView, UpdateView, DeleteView, FormView
+from django.urls import reverse_lazy
+from django.views.generic import ListView, DetailView, UpdateView, DeleteView, FormView
 
 from base.forms import ClientForm, AddressForm, RecyclerForm, OrderForm
-from base.models import Client, Address, Recycler, Order
+from base.models import Client, Address, Recycler
 
 
-#testy do forms, walidacji i FormView
-#zmienić na FormView i przypisać adres do klienta
+# testy do forms, walidacji i FormView
 
+
+# WIDOKI CLIENT
 
 @login_required
 def client_address_create(request):
@@ -27,14 +26,16 @@ def client_address_create(request):
         street = form_2.cleaned_data["street"]
         city = form_2.cleaned_data["city"]
         postal_code = form_2.cleaned_data["postal_code"]
-        client = Client.objects.create(user=request.user, first_name=first_name, last_name=last_name, email=email, phone=phone, strefa=strefa)
+        client = Client.objects.create(user=request.user, first_name=first_name, last_name=last_name, email=email,
+                                       phone=phone, strefa=strefa)
         Address.objects.create(user=request.user, street=street, city=city, postal_code=postal_code)
         return redirect("/base/clients-detail-view/")
     return render(
         request,
         template_name="client_address.html",
         context={"form": form,
-                     "form_2": form_2})
+                 "form_2": form_2})
+
 
 class CurrentUserMixin(object):
     model = Client
@@ -48,31 +49,33 @@ class CurrentUserMixin(object):
 
         # return obj
 
-class ClientListView(LoginRequiredMixin,ListView):
+
+class ClientListView(LoginRequiredMixin, ListView):
     template_name = "clients_list_view.html"
     model = Client
 
 
-class ClientDetailView(LoginRequiredMixin,CurrentUserMixin, DetailView):
+class ClientDetailView(LoginRequiredMixin, CurrentUserMixin, DetailView):
     model = Client
     template_name = "clients_detail_view.html"
 
 
-class ClientUpdateView(LoginRequiredMixin,UpdateView):
+class ClientUpdateView(LoginRequiredMixin, UpdateView):
     model = Client
     fields = "__all__"
     template_name = "form.html"
     success_url = reverse_lazy("homepage")
 
 
-class ClientDeleteView(LoginRequiredMixin,DeleteView):
+class ClientDeleteView(LoginRequiredMixin, DeleteView):
     model = Client
     template_name = "clients_delete.html"
     success_url = reverse_lazy("homepage")
 
+
 # WIDOKI RECYCLER
 
-class RecyclerFormView(LoginRequiredMixin,FormView):
+class RecyclerFormView(LoginRequiredMixin, FormView):
     template_name = "form.html"
     form_class = RecyclerForm
     success_url = reverse_lazy("homepage")
@@ -105,9 +108,10 @@ class RecyclerFormView(LoginRequiredMixin,FormView):
     def form_invalid(self, form):
         return super().form_invalid(form)
 
+
 # WIDOKI ORDERS
 
-class OrderFormView(LoginRequiredMixin,FormView):
+class OrderFormView(LoginRequiredMixin, FormView):
     template_name = "order_form.html"
     form_class = OrderForm
     success_url = reverse_lazy("homepage")
@@ -135,6 +139,7 @@ class OrderFormView(LoginRequiredMixin,FormView):
     # def form_invalid(self, form):
     #     return super().form_invalid(form)
 
+
 @login_required
 def order_user(request):
     if request.method == "POST":
@@ -158,7 +163,4 @@ def order_user(request):
 
     else:
         form = OrderForm
-    return render(request, 'form.html', {"form":form})
-
-
-
+    return render(request, 'form.html', {"form": form})
